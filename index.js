@@ -2,6 +2,7 @@
 const chalk = require('chalk');
 const { prompt } = require('enquirer');
 const emoji = require('node-emoji');
+const dns = require('./dns');
 
 
 const kickStartApplication = async () => {
@@ -17,14 +18,14 @@ const kickStartApplication = async () => {
     name: 'numberOfServers',
     message: 'How many servers do you want to compare ? \n (Minimum Number: 1 Maximum Number: 5)',
     initial: '2',
-    validate: input => !isNaN(Number(input)) && Number(input) < 5 && Number(input) > 1 || 'Number of Servers should be between 2 - 5',
+    validate: input => (!isNaN(Number(input)) && Number(input) < 5 && Number(input) > 1) || 'Number of Servers should be between 2 - 5',
   };
 
   // Enter Server Addresses
   const serverAddresses = {
     type: 'form',
     name: 'serverAddresses',
-    message: 'Enter the Websites / IP addresses of the servers',
+    message: 'Enter the Host Names / IPv4 addresses (with port, if necessary) of the servers',
     limit: 5,
     choices: null,
     validate: form => Object.values(form).every(address => regex.test(address)) || 'Invalid IP/Web Address',
@@ -32,7 +33,6 @@ const kickStartApplication = async () => {
 
   prompt(numberOfServers)
     .then((answer) => {
-      // console.log(answer);
       serverAddresses.choices = Array(Number(answer.numberOfServers)).fill(`${emoji.find('computer').emoji}  Server`);
 
       serverAddresses.choices.forEach((item, index, array) => {
@@ -42,7 +42,9 @@ const kickStartApplication = async () => {
 
       prompt(serverAddresses)
         .then((ans) => {
-          // console.log(ans);
+          console.log(ans);
+
+          dns.lookup(Object.values(ans.serverAddresses));
         })
         .catch(e => console.error(e));
     })
