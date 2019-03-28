@@ -25,7 +25,15 @@ const isHostName = (server) => {
 
 // Confirm IP address
 const isIpAddress = (server) => {
-  dns.lookupService(`${server}`);
+  console.log({ server });
+
+  // Check if port number is included
+  const serverAndPort = server.split(':');
+
+  dns.lookupService(`${serverAndPort[0]}`, `${serverAndPort[1]}`, (err, hostname, service) => {
+    if (err) console.log(`\n Oops! An error occured locating server, ${server}`);
+    console.log(`\n Server found!, ${server} with hostname ${hostname} and service ${service} is valid!...`);
+  });
 };
 
 module.exports = {
