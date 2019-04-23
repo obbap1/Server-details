@@ -1,14 +1,17 @@
 const dns = require('dns');
 const Queue = require('better-queue');
 const { Spinner } = require('cli-spinner');
+const chalk = require('chalk');
 
 const regex = /(\d{1,3}).(\d{1,3}).(\d{1,3}).(\d{1,3})(:\d+)?/;
 // eslint-disable-next-line no-undef
-const queue = new Queue((input, callback) => {
+const queue = new Queue((batch, callback) => {
 
   // Execute shell to perform trace route
+  console.log({batch});
+  callback();
 
-});
+},{batchSize: 3});
 
 
 // Confirm host name exists
@@ -18,23 +21,37 @@ const isHostName = (server) => {
     if (address) {
       console.log(`\n Server found!, ${server} with address ${address} and family ${family} is valid!...`);
       // Push to queue
-      queue.push(server);
+      queue.push(address);
     }
   });
 };
 
 // Confirm IP address
 const isIpAddress = (server) => {
-  console.log({ server });
-
   // Check if port number is included
   const serverAndPort = server.split(':');
 
-  dns.lookupService(`${serverAndPort[0]}`, `${serverAndPort[1]}`, (err, hostname, service) => {
-    if (err) console.log(`\n Oops! An error occured locating server, ${server}`);
-    console.log(`\n Server found!, ${server} with hostname ${hostname} and service ${service} is valid!...`);
-  });
+  try{
+
+      dns.lookupService(`${serverAndPort[0]}`, `${serverAndPort[1]}`, (err, hostname, service) => {
+        if (err) {
+          throw new Error(`\n Oops! An error occured locating server, ${server}`);
+          console.log(`\n Oops! An error occured locating server, ${server}`);
+        }
+        else{
+          console.log(`\n Server found!, ${server} with hostname ${hostname} and service ${service} is valid!...`);
+          queue.push(serverAndPort[0]);
+        }
+        
+        
+      });
+  }
+  catch(e){
+    console.error(chalk.red(e.message));
+  }
+  
 };
+
 
 module.exports = {
   // Validate if server or IP address exists
