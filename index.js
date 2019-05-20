@@ -6,7 +6,7 @@ const dns = require('./dns');
 
 
 const kickStartApplication = async () => {
-  console.log(chalk.blue('Welcome!, Find the server closest to you'));
+  console.log(chalk.blue('Welcome!, Find the details of your servers'));
 
   // eslint-disable-next-line no-useless-escape
   const regex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/i;
@@ -16,7 +16,7 @@ const kickStartApplication = async () => {
   const numberOfServers = {
     type: 'input',
     name: 'numberOfServers',
-    message: 'How many servers do you want to compare ? \n (Minimum Number: 1 Maximum Number: 5)',
+    message: 'How many servers do you need info on ? \n (Minimum Number: 1 Maximum Number: 5)',
     initial: '2',
     validate: input => (!isNaN(Number(input)) && Number(input) < 5 && Number(input) > 1) || 'Number of Servers should be between 2 - 5',
   };

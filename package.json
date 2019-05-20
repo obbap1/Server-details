@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "better-queue": "^3.8.10",
     "chalk": "^2.4.2",
     "cli-spinner": "^0.2.10",
