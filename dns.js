@@ -10,17 +10,41 @@ const regex = /(\d{1,3}).(\d{1,3}).(\d{1,3}).(\d{1,3})(:\d+)?/;
 // eslint-disable-next-line no-undef
 const queue = new Queue(
 	(batch, callback) => {
-    // Execute shell to perform trace route
-    console.log({batch})
+		// Execute shell to perform trace rou
 		batch.forEach(query => {
 			//get details about ip
 			axios
 				.get(`http://ip-api.com/json/${query.address}`)
 				.then(res => {
-          console.log(`${chalk.blueBright(query.server)} is located in ${chalk.yellow(res.data.city)}, ${chalk.red(res.data.country)} \n`);
-          console.log(`Internet Service Provider -> ${chalk.magenta(res.data.isp)} with latitude ${chalk.cyan(res.data.lat)} and longitude ${chalk.greenBright(res.data.lon)}\n`);
-          console.log(`Timezone -> ${chalk.cyanBright(res.data.timezone)}, Region: ${chalk.magentaBright(res.data.regionName)}`);
-          console.log(chalk.green('------------------------------------------------------------'));
+					console.log(
+						chalk.green(
+							"------------------------------------------------------------"
+						)
+					);
+					console.log(
+						`\n ${chalk.blueBright(
+							query.server
+						)} is located in ${chalk.yellow(
+							res.data.city
+						)}, ${chalk.red(res.data.country)} \n`
+					);
+					console.log(
+						`Internet Service Provider -> ${chalk.magenta(
+							res.data.isp
+						)} with latitude ${chalk.cyan(
+							res.data.lat
+						)} and longitude ${chalk.greenBright(res.data.lon)}\n`
+					);
+					console.log(
+						`Timezone -> ${chalk.cyanBright(
+							res.data.timezone
+						)}, Region: ${chalk.magentaBright(res.data.regionName)}`
+					);
+					console.log(
+						chalk.green(
+							"------------------------------------------------------------"
+						)
+					);
 					callback();
 				})
 				.catch(e => {
@@ -32,8 +56,8 @@ const queue = new Queue(
 );
 
 queue.on("drain", () => {
-  console.log("Done and Dusted 😄");
-  spinner.stop();
+	console.log("Done and Dusted 😄");
+	spinner.stop();
 });
 
 // Confirm host name exists
@@ -46,7 +70,7 @@ const isHostName = server => {
 				`\n Server found!, ${server} with address ${address} and family ${family} is valid!...`
 			);
 			// Push to queue
-			queue.push({address,server});
+			queue.push({ address, server });
 		}
 	});
 };
@@ -84,7 +108,7 @@ module.exports = {
 	// Validate if server or IP address exists
 	lookup: async servers => {
 		// Start spinner
-		
+
 		spinner.setSpinnerString("|/-\\");
 		spinner.start();
 
