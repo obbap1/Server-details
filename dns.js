@@ -3,10 +3,11 @@ const Queue = require("better-queue");
 const { Spinner } = require("cli-spinner");
 const chalk = require("chalk");
 const axios = require("axios");
+const {isIpValid} = require('./helpers/is.valid');
 
 const spinner = new Spinner("Performing lookup...%s");
 
-const regex = /(\d{1,3}).(\d{1,3}).(\d{1,3}).(\d{1,3})(:\d+)?/;
+
 // eslint-disable-next-line no-undef
 const queue = new Queue(
 	(batch, callback) => {
@@ -114,7 +115,7 @@ module.exports = {
 
 		servers.forEach(server => {
 			// eslint-disable-next-line no-unused-expressions
-			regex.test(server) ? isIpAddress(server) : isHostName(server);
+			isIpValid(server) ? isIpAddress(server) : isHostName(server);
 		});
 	}
 };

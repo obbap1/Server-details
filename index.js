@@ -3,14 +3,22 @@
 const chalk = require("chalk");
 const { prompt } = require("enquirer");
 const emoji = require("node-emoji");
+const useCli = require("./use.cli");
 const dns = require("./dns");
+const {isValid} = require('./helpers/is.valid');
 
+// eslint-disable-next-line no-useless-escape
 const kickStartApplication = async () => {
-	console.log(chalk.blue("Welcome!, Find the details of your servers"));
 
-	// eslint-disable-next-line no-useless-escape
-	const regex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/i;
+  const [,, ...args] = process.argv;
+  
+  if(args.length > 0){
+    //use cli
+    return useCli(args);
+  }
 
+  console.log(chalk.blue("Welcome!, Find the details of your servers"));
+  
 	// Get number of servers
 
 	const numberOfServers = {
@@ -20,7 +28,7 @@ const kickStartApplication = async () => {
 			"How many servers do you need info on ? \n (Minimum Number: 1 Maximum Number: 5)",
 		initial: "2",
 		validate: input =>
-			(!isNaN(Number(input)) && Number(input) < 5 && Number(input) > 1) ||
+			(!isNaN(Number(input)) && Number(input) <= 5 && Number(input) > 1) ||
 			"Number of Servers should be between 2 - 5"
 	};
 
@@ -33,7 +41,7 @@ const kickStartApplication = async () => {
 		limit: 5,
 		choices: null,
 		validate: form =>
-			Object.values(form).every(address => regex.test(address)) ||
+			Object.values(form).every(address => isValid(address)) ||
 			"Invalid IP/Web Address"
 	};
 
