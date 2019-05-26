@@ -8,7 +8,6 @@ const useCli = async args => {
 			chalk.red("Number of Servers should be between 2 - 5")
 		);
     const valid = args.every(x => isValid(x));
-    console.log({valid});
     return valid ? dns.lookup(args) : console.log(chalk.red("Invalid IP/Web Address"));
 };
 
