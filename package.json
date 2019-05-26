@@ -1,7 +1,7 @@
 {
-  "name": "djikistra",
+  "name": "server-details",
   "version": "1.0.0",
-  "description": "",
+  "description": "A small library to find the details(Latitude & Longitude, Timezone, Region, ISP of your servers" ,
   "main": "index.js",
   "scripts": {
     "test": "mocha ./tests --watch --exit",
